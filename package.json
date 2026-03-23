@@ -1,0 +1,39 @@
+{
+  "name": "book-hub",
+  "version": "1.0.0",
+  "description": "Book Hub commerce app for book sales and order approval",
+  "main": "backend/app.js",
+  "scripts": {
+    "start": "node backend/app.js",
+    "dev": "nodemon backend/app.js",
+    "start:dev": "nodemon backend/app.js",
+    "test": "jest --runInBand --passWithNoTests --detectOpenHandles",
+    "lint": "eslint backend/**/*.js"
+  },
+  "keywords": [
+    "books",
+    "library",
+    "commerce",
+    "marketplace",
+    "orders"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "express-validator": "^7.0.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.5.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.50.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1"
+  }
+}

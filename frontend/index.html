@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Sora:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./css/custom.css" />
+  </head>
+  <body>
+    <div class="bg-layer bg-layer-1"></div>
+    <div class="bg-layer bg-layer-2"></div>
+
+    <div id="app-layout" class="layout auth-mode">
+      <aside id="app-sidebar" class="sidebar">
+        <div class="brand">
+          <div class="brand-icon">
+            <i class="fas fa-book"></i>
+          </div>
+          <div>
+            <h1>Book Hub</h1>
+            <p>Simple book system</p>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <button id="nav-auth" class="nav-btn" onclick="showSection('auth')">
+            <i class="fas fa-right-to-bracket"></i>
+            <span>Sign In</span>
+          </button>
+          <button id="nav-marketplace" class="nav-btn hidden" onclick="showSection('marketplace')">
+            <i class="fas fa-store"></i>
+            <span>Marketplace</span>
+          </button>
+          <button id="nav-orders" class="nav-btn hidden" onclick="showSection('orders')">
+            <i class="fas fa-receipt"></i>
+            <span>My Orders</span>
+          </button>
+          <button id="nav-admin" class="nav-btn hidden" onclick="showSection('admin')">
+            <i class="fas fa-user-shield"></i>
+            <span>Admin Panel</span>
+          </button>
+          <button id="nav-logout" class="nav-btn hidden" onclick="logout()">
+            <i class="fas fa-arrow-right-from-bracket"></i>
+            <span>Logout</span>
+          </button>
+        </nav>
+
+        <div id="user-profile" class="profile hidden">
+          <img id="profile-image" alt="Profile image" />
+          <div>
+            <p id="user-name">Guest</p>
+            <p id="user-email">guest@example.com</p>
+            <span id="user-role-badge" class="role-pill">USER</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <section id="auth-section" class="section auth-wrap">
+          <div class="auth-card">
+            <div class="auth-left">
+              <div class="auth-tabs">
+                <button id="auth-tab-login" class="auth-tab active" onclick="switchAuthMode('login')">
+                  Sign In
+                </button>
+                <button id="auth-tab-register" class="auth-tab" onclick="switchAuthMode('register')">
+                  Sign Up
+                </button>
+              </div>
+
+              <div id="auth-login-panel" class="auth-panel">
+                <h2>Sign In</h2>
+                <p>Use your email and password.</p>
+                <form onsubmit="handleLogin(event)" class="form-stack">
+                  <div>
+                    <label for="login-email">Email</label>
+                    <input id="login-email" type="email" required />
+                  </div>
+                  <div>
+                    <label for="login-password">Password</label>
+                    <input id="login-password" type="password" required />
+                  </div>
+                  <button type="submit" class="btn btn-primary full">Sign In</button>
+                </form>
+                <div class="auth-help">
+                  <p>Your account is protected.</p>
+                </div>
+              </div>
+
+              <div id="auth-register-panel" class="auth-panel hidden">
+                <h2>Create Account</h2>
+                <p>Add your details to start.</p>
+                <form onsubmit="handleRegister(event)" class="form-stack">
+                  <div>
+                    <label for="reg-name">Name</label>
+                    <input id="reg-name" type="text" required />
+                  </div>
+                  <div>
+                    <label for="reg-email">Email</label>
+                    <input id="reg-email" type="email" required />
+                  </div>
+                  <div>
+                    <label for="reg-password">Password</label>
+                    <input id="reg-password" type="password" required />
+                  </div>
+                  <div>
+                    <label for="reg-confirm">Confirm Password</label>
+                    <input id="reg-confirm" type="password" required />
+                  </div>
+                  <button type="submit" class="btn btn-primary full">Create Account</button>
+                </form>
+                <div class="auth-help">
+                  <p>Emails in <code>ADMIN_EMAILS</code> get admin access.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="auth-right">
+              <p class="kicker">Quick Info</p>
+              <h3 id="auth-side-title">New here?</h3>
+              <p id="auth-side-text">Create an account to buy and track books.</p>
+              <button id="auth-side-btn" class="btn btn-outline" onclick="switchAuthMode('register')">
+                Create Account
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section id="marketplace-section" class="section hidden stack-20">
+          <header class="panel top-strip marketplace-strip">
+            <div>
+              <p class="kicker">Marketplace</p>
+              <h2>Browse Books</h2>
+            </div>
+            <div id="admin-market-actions" class="hidden">
+              <button class="btn btn-primary" onclick="openBookModal()">
+                <i class="fas fa-plus"></i>
+                <span>Add Catalog Book</span>
+              </button>
+            </div>
+          </header>
+
+          <div class="stats-grid stats-grid-three marketplace-stats">
+            <article class="stat-card">
+              <p>Total Books</p>
+              <h3 id="market-stat-books">0</h3>
+            </article>
+            <article class="stat-card stat-accent">
+              <p>Books In Stock</p>
+              <h3 id="market-stat-stock">0</h3>
+            </article>
+            <article class="stat-card stat-soft">
+              <p>Pending Orders</p>
+              <h3 id="market-stat-pending">0</h3>
+            </article>
+          </div>
+
+          <div class="panel filters">
+            <div class="search-box">
+              <i class="fas fa-magnifying-glass"></i>
+              <input
+                id="book-search-input"
+                placeholder="Search by title, author, or genre"
+                oninput="setBookSearch(this.value)"
+              />
+            </div>
+            <div class="toolbar-selects filter-sort">
+              <label for="book-price-sort">Sort Price</label>
+              <select id="book-price-sort" onchange="setPriceSort(this.value)">
+                <option value="default">Default</option>
+                <option value="low_to_high">Low to High</option>
+                <option value="high_to_low">High to Low</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="books-grid" class="books-grid"></div>
+        </section>
+
+        <section id="orders-section" class="section hidden stack-20">
+          <header class="panel top-strip">
+            <div>
+              <p class="kicker">Orders</p>
+              <h2>My Orders</h2>
+            </div>
+          </header>
+          <div class="stats-grid">
+            <article class="stat-card">
+              <p>Total Orders</p>
+              <h3 id="order-stat-total">0</h3>
+            </article>
+            <article class="stat-card stat-accent">
+              <p>Pending</p>
+              <h3 id="order-stat-pending">0</h3>
+            </article>
+            <article class="stat-card stat-soft">
+              <p>Completed</p>
+              <h3 id="order-stat-completed">0</h3>
+            </article>
+            <article class="stat-card stat-warm">
+              <p>Rejected</p>
+              <h3 id="order-stat-rejected">0</h3>
+            </article>
+          </div>
+          <div class="panel orders-toolbar">
+            <div class="toolbar-selects">
+              <label for="orders-status-filter">Status</label>
+              <select id="orders-status-filter" onchange="setOrdersStatusFilter(this.value)">
+                <option value="all">All</option>
+                <option value="pending">Pending</option>
+                <option value="in_transit">On The Way</option>
+                <option value="completed">Completed</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+          </div>
+          <div id="orders-list" class="orders-grid"></div>
+        </section>
+
+        <section id="admin-section" class="section hidden stack-20">
+          <header class="panel top-strip admin-strip">
+            <div>
+              <p class="kicker">Admin Center</p>
+              <h2>Admin Dashboard</h2>
+            </div>
+            <button class="btn btn-primary" onclick="openBookModal()">
+              <i class="fas fa-plus"></i>
+              <span>Add Catalog Book</span>
+            </button>
+          </header>
+
+          <div class="stats-grid stats-grid-three admin-core-stats">
+            <article class="stat-card">
+              <p>Total Catalog Books</p>
+              <h3 id="admin-stat-total-books">0</h3>
+            </article>
+            <article class="stat-card stat-soft">
+              <p>Total Sales Revenue</p>
+              <h3 id="admin-stat-sales">$0.00</h3>
+            </article>
+            <article class="stat-card stat-warm">
+              <p>Total Orders</p>
+              <h3 id="admin-stat-total-orders">0</h3>
+            </article>
+          </div>
+          <div class="stats-grid admin-orders-grid">
+            <article class="stat-card">
+              <p>Under Review</p>
+              <h3 id="admin-stat-pending">0</h3>
+            </article>
+            <article class="stat-card">
+              <p>Orders On The Way</p>
+              <h3 id="admin-stat-in-transit">0</h3>
+            </article>
+            <article class="stat-card">
+              <p>Completed Orders</p>
+              <h3 id="admin-stat-completed">0</h3>
+            </article>
+          </div>
+
+          <div class="panel admin-orders-panel">
+            <div class="panel-head-inline admin-orders-head">
+              <div>
+                <p class="kicker">Order Queue</p>
+                <h3>Requests and History</h3>
+              </div>
+              <div class="toolbar-selects toolbar-selects-compact">
+                <label for="admin-transactions-filter">Status</label>
+                <select id="admin-transactions-filter" onchange="setAdminTransactionsFilter(this.value)">
+                  <option value="all">All</option>
+                  <option value="pending">Pending</option>
+                  <option value="in_transit">On The Way</option>
+                  <option value="completed">Completed</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+            </div>
+            <div id="admin-transactions-list" class="orders-grid"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="book-modal" class="modal">
+      <div class="modal-card panel">
+        <div class="modal-head">
+          <h3 id="book-modal-title">Add Catalog Book</h3>
+          <button class="icon-btn" onclick="closeModal('book-modal')">
+            <i class="fas fa-xmark"></i>
+          </button>
+        </div>
+        <form id="book-form" class="form-stack" onsubmit="handleBookSubmit(event)">
+          <input type="hidden" id="book-id" />
+          <div class="grid-2">
+            <div>
+              <label for="book-title">Title</label>
+              <input id="book-title" required />
+            </div>
+            <div>
+              <label for="book-author">Author</label>
+              <input id="book-author" required />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div>
+              <label for="book-genre">Genre</label>
+              <input id="book-genre" placeholder="General" />
+            </div>
+            <div>
+              <label for="book-isbn">ISBN</label>
+              <input id="book-isbn" placeholder="Optional" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div>
+              <label for="book-price">Sale Price</label>
+              <input id="book-price" type="number" min="0" step="0.01" required />
+            </div>
+            <div>
+              <label for="book-stock">Stock</label>
+              <input id="book-stock" type="number" min="0" step="1" required />
+            </div>
+          </div>
+          <div>
+            <label for="book-cover-image">Cover Image URL</label>
+            <input id="book-cover-image" type="url" placeholder="https://..." />
+          </div>
+          <div>
+            <label for="book-description">Description</label>
+            <textarea id="book-description" rows="4"></textarea>
+          </div>
+          <div class="toggle-row">
+            <label><input id="book-featured" type="checkbox" /> Featured</label>
+          </div>
+          <div class="modal-actions">
+            <button type="submit" class="btn btn-primary full">Save</button>
+            <button type="button" class="btn btn-secondary full" onclick="closeModal('book-modal')">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="deal-modal" class="modal">
+      <div class="modal-card panel">
+        <div class="modal-head">
+          <h3 id="deal-modal-title">Confirm Action</h3>
+          <button class="icon-btn" onclick="closeModal('deal-modal')">
+            <i class="fas fa-xmark"></i>
+          </button>
+        </div>
+        <form id="deal-form" class="form-stack" onsubmit="confirmDeal(event)">
+          <input type="hidden" id="deal-book-id" />
+          <div id="deal-book-summary" class="deal-summary"></div>
+          <div class="grid-2">
+            <div>
+              <label for="deal-customer-name">Full Name</label>
+              <input id="deal-customer-name" required />
+            </div>
+            <div>
+              <label for="deal-phone">Phone</label>
+              <input id="deal-phone" required />
+            </div>
+          </div>
+          <div>
+            <label for="deal-address">Address</label>
+            <input id="deal-address" required />
+          </div>
+          <div>
+            <label for="deal-notes">Notes (Optional)</label>
+            <textarea id="deal-notes" rows="2" placeholder="Any delivery or contact notes"></textarea>
+          </div>
+          <div id="deal-quantity-wrap">
+            <label for="deal-quantity">Quantity</label>
+            <input id="deal-quantity" type="number" min="1" step="1" value="1" />
+          </div>
+          <div class="modal-actions">
+            <button type="submit" class="btn btn-primary full">Confirm</button>
+            <button type="button" class="btn btn-secondary full" onclick="closeModal('deal-modal')">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="./js/app.js"></script>
+  </body>
+</html>
