@@ -66,7 +66,7 @@ A single unified system for both the marketplace experience and backend operatio
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) v16+
-- [MongoDB](https://www.mongodb.com/) (local instance or MongoDB Atlas)
+- [MongoDB](https://www.mongodb.com/) (local instance or MongoDB Atlas).
 
 ### Installation
 
